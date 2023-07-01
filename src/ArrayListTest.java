@@ -164,4 +164,5 @@ public class ArrayListTest {
         String[] expectedArray = {"Hello", "World", "!"};
         assertArrayEquals(expectedArray, list.toArray());
     }
+
 }

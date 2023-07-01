@@ -181,4 +181,5 @@ public class ArrayList implements StringList {
             elements = Arrays.copyOf(elements, newCapacity);
         }
     }
+
 }
