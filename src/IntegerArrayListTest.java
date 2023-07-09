@@ -173,4 +173,47 @@ public class IntegerArrayListTest {
         Assert.assertEquals(2, list.binarySearch(30));
         Assert.assertEquals(-1, list.binarySearch(40));
     }
+    @Test
+    public void testGrow() {
+        for (int i = 0; i < 12; i++) {
+            list.add(i);
+        }
+
+        Assert.assertEquals(12, list.size());
+        Assert.assertEquals(Integer.valueOf(0), list.get(0));
+        Assert.assertEquals(Integer.valueOf(11), list.get(11));
+    }
+
+    @Test
+    public void testAddAfterGrow() {
+        for (int i = 0; i < 10; i++) {
+            list.add(i);
+        }
+
+        Assert.assertEquals(10, list.size());
+        Assert.assertEquals(Integer.valueOf(0), list.get(0));
+        Assert.assertEquals(Integer.valueOf(9), list.get(9));
+
+        list.add(10);
+
+        Assert.assertEquals(11, list.size());
+        Assert.assertEquals(Integer.valueOf(0), list.get(0));
+        Assert.assertEquals(Integer.valueOf(9), list.get(9));
+        Assert.assertEquals(Integer.valueOf(10), list.get(10));
+    }
+
+    @Test
+    public void testRecursiveSort() {
+        list.add(30);
+        list.add(10);
+        list.add(20);
+
+        list.sort();
+
+        Assert.assertEquals(3, list.size());
+        Assert.assertEquals(Integer.valueOf(10), list.get(0));
+        Assert.assertEquals(Integer.valueOf(20), list.get(1));
+        Assert.assertEquals(Integer.valueOf(30), list.get(2));
+    }
+
 }

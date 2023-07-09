@@ -16,5 +16,6 @@ public interface IntegerList {
     Integer[] toArray();
     void sort();
     int binarySearch(Integer item);
+
 }
 

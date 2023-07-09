@@ -19,17 +19,6 @@ public class IntegerArrayList implements IntegerList {
         this.elements = new Integer[initialCapacity];
         this.size = 0;
     }
-
-    @Override
-    public Integer add(Integer item) {
-        if (item == null) {
-            throw new IllegalArgumentException("Item cannot be null");
-        }
-        ensureCapacity(size + 1);
-        elements[size++] = item;
-        return item;
-    }
-
     @Override
     public Integer add(int index, Integer item) {
         if (item == null) {
@@ -172,38 +161,6 @@ public class IntegerArrayList implements IntegerList {
     }
 
     @Override
-    public void sort() {
-        quickSort(0, size - 1);
-    }
-
-    private void quickSort(int low, int high) {
-        if (low < high) {
-            int pivotIndex = partition(low, high);
-            quickSort(low, pivotIndex - 1);
-            quickSort(pivotIndex + 1, high);
-        }
-    }
-
-    private int partition(int low, int high) {
-        Integer pivot = elements[high];
-        int i = low - 1;
-        for (int j = low; j < high; j++) {
-            if (elements[j] <= pivot) {
-                i++;
-                swap(i, j);
-            }
-        }
-        swap(i + 1, high);
-        return i + 1;
-    }
-
-    private void swap(int i, int j) {
-        Integer temp = elements[i];
-        elements[i] = elements[j];
-        elements[j] = temp;
-    }
-
-    @Override
     public int binarySearch(Integer item) {
         sort();
         return binarySearch(item, 0, size - 1);
@@ -239,6 +196,61 @@ public class IntegerArrayList implements IntegerList {
     private void validateIndexForAdd(int index) {
         if (index < 0 || index > size) {
             throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + size);
+        }
+    }
+    private void grow() {
+        int newCapacity = elements.length + (elements.length >> 1); // Увеличение емкости на 50%
+        elements = Arrays.copyOf(elements, newCapacity);
+    }
+    @Override
+    public Integer add(Integer item) {
+        if (item == null) {
+            throw new IllegalArgumentException("Item cannot be null");
+        }
+        if (size == elements.length) {
+            grow(); // Расширение массива, если он заполнен
+        }
+        elements[size++] = item;
+        return item;
+    }
+
+    public void sort() {
+        mergeSort(0, size - 1);
+    }
+    private void mergeSort(int low, int high) {
+        if (low < high) {
+            int mid = low + (high - low) / 2;
+            mergeSort(low, mid);
+            mergeSort(mid + 1, high);
+            merge(low, mid, high);
+        }
+    }
+
+    private void merge(int low, int mid, int high) {
+        int leftSize = mid - low + 1;
+        int rightSize = high - mid;
+
+        Integer[] left = new Integer[leftSize];
+        Integer[] right = new Integer[rightSize];
+
+        System.arraycopy(elements, low, left, 0, leftSize);
+        System.arraycopy(elements, mid + 1, right, 0, rightSize);
+
+        int i = 0, j = 0, k = low;
+        while (i < leftSize && j < rightSize) {
+            if (left[i] <= right[j]) {
+                elements[k++] = left[i++];
+            } else {
+                elements[k++] = right[j++];
+            }
+        }
+
+        while (i < leftSize) {
+            elements[k++] = left[i++];
+        }
+
+        while (j < rightSize) {
+            elements[k++] = right[j++];
         }
     }
 }
